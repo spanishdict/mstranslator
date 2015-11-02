@@ -14,13 +14,34 @@ var params = {
   to: 'es'
 };
 
+var addParams = {
+  originalText:   'Esto es una prueba',
+  translatedText: 'This is a quiz',
+  from:           'es',
+  to:             'en',
+  rating:           9
+  // user:           'samwolo'
+};
+
+var getParams = {
+  text:   'Esto es una prueba',
+  from:           'es',
+  to:             'en',
+  maxTranslations: 200
+};
+
 var client = new MsTranslator({
   client_id: client_id,
   client_secret: client_secret
 });
 
 client.initialize_token(function(){
-  client.translate(params, function(err, data) {
+  client.addTranslation(addParams, function(err, data) {
+    if (err) console.log('error:' + err.message);
+    console.log(data);
+  });
+
+  client.getTranslations(getParams, function(err, data) {
     if (err) console.log('error:' + err.message);
     console.log(data);
     process.exit();

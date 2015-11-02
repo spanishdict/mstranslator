@@ -71,6 +71,8 @@ MsTranslator.prototype.makeRequest = function(path, params, fn, method) {
     }, true);
   }
   else {
+    console.log("DEBUG path", path);
+    console.log("DEBUG params", params);
     this[method](path, params, fn);
   }
 };
@@ -110,6 +112,7 @@ MsTranslator.prototype.call = function(path, params, fn) {
   settings.headers.Authorization = 'Bearer ' + this.access_token;
   params = this.convertArrays(params);
   settings.path= this.ajax_root + path + '?' + querystring.stringify(params);
+  console.log('DEBUG path in .call', settings.path);
   var req = http.request(settings, function(res) {
     res.setEncoding('utf8');
     var body = '';
@@ -119,6 +122,7 @@ MsTranslator.prototype.call = function(path, params, fn) {
     res.on('end', function () {
       //remove invalid BOM
       body = body.substring(1, body.length);
+      console.log('DEBUG body', body);
       try {
         var errMessages = errPatterns.filter(function(pattern) {
           return body.indexOf(pattern) === 1;
@@ -241,4 +245,13 @@ MsTranslator.prototype.translateArray = function(params, fn) {
 // http://msdn.microsoft.com/en-us/library/dn198370.aspx
 MsTranslator.prototype.translateArray2 = function(params, fn) {
   this.makeRequest('TranslateArray2', params, fn);
+};
+
+// AddTranslation Method
+// params { originalText, translatedText, from, to, user, options }
+// http://api.microsofttranslator.com/V2/Ajax.svc/AddTranslation
+MsTranslator.prototype.addTranslation = function(params, fn) {
+  console.log("DEBUG addTranslation called");
+  this.makeRequest('addTranslation', params, fn);
+  console.log("DEBUG after");
 };
